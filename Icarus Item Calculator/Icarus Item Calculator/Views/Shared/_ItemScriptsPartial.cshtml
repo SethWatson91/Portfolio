@@ -1,0 +1,44 @@
+﻿<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const recipeSearch = document.getElementById('recipeSearch');
+        const selectedItems = document.getElementById('selectedItems');
+        const quantitiesContainer = document.getElementById('quantitiesContainer');
+        let searchTimeout;
+
+        // Debounce the search function
+        recipeSearch.addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchValue = this.value.toLowerCase();
+                Array.from(selectedItems.options).forEach(option => {
+                    option.style.display = option.text.toLowerCase().includes(searchValue) ? '' : 'none';
+                });
+            }, 300); // 300ms delay before search is applied
+        });
+
+        // Update quantities based on selection (standard multi-select behavior)
+        selectedItems.addEventListener('change', function () {
+            updateQuantities();
+        });
+
+        function updateQuantities() {
+            const selectedOptionValues = Array.from(selectedItems.selectedOptions).map(option => option.value);
+            Array.from(quantitiesContainer.querySelectorAll('.quantity-input')).forEach(input => {
+                const itemId = input.getAttribute('data-item-id');
+                input.style.display = selectedOptionValues.includes(itemId) ? 'block' : 'none';
+            });
+
+            if (selectedOptionValues.includes('0')) {
+                Array.from(selectedItems.options).forEach(option => {
+                    if (option.value !== '0') {
+                        option.selected = false;
+                    }
+                });
+                Array.from(quantitiesContainer.querySelectorAll('.quantity-input')).forEach(input => input.style.display = 'none');
+            }
+        }
+
+        // Initialize quantities for edit scenario
+        updateQuantities();
+    });
+</script>

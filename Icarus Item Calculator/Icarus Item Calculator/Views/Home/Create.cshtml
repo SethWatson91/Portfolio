@@ -1,0 +1,26 @@
+﻿@model Icarus_Item_Calculator.Models.Item
+
+@{
+    ViewData["Title"] = Model.ItemId == 0 ? "Create New Item" : "Edit Item";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Item</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @await Html.PartialAsync("_ItemFormPartial", Model)
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ItemScriptsPartial")
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
